@@ -2,3 +2,6 @@
   border-left: solid 5px red;
   font-weight: bold;
 }
+.selected:focus {
+  outline: 0;
+}
