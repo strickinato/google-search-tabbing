@@ -1,0 +1,4 @@
+.selected {
+  border-left: solid 5px red;
+  font-weight: bold;
+}

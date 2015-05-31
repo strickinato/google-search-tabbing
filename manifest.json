@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+
+  "name": "Tab Crawling Google",
+  "description": "This extension adds tab indexes to the google search results page",
+  "version": "0.1",
+
+  "permissions": [
+    "<all_urls>"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": [
+          "http://*.google.com/*",
+          "https://*.google.com/*"
+          ],
+      "css": ["style.css"],
+      "js": ["script.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
