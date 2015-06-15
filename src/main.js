@@ -1,5 +1,4 @@
 (function(chrome, window) {
-
   
   function Thing(window, LinkNode) {
     var self = this
@@ -24,9 +23,17 @@
       }
     }
   };
-  var LinkNode = require('./link_node')
-    , thing    = new Thing(window, LinkNode)
+  var LinkNode  = require('./link_node')
+    , NodeList  = require('./node_list')
+    , KeyMapper = require('./keymapper')
+    , thing     = new Thing(window, LinkNode)
+    , keyMapper = new KeyMapper(window)
 
   nodes = thing.grabNodes()
+  nodeList = new NodeList(window, nodes)
   thing.printNodes(nodes)
+
+  keyMapper.addHandler(74, nodeList.nextNode);
+  keyMapper.addHandler(75, nodeList.prevNode);
+
 }).call(null, chrome, window);
