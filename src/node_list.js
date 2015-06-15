@@ -1,6 +1,6 @@
-function NodeList(window, nodes) {
+function NodeList(window, LinkNode) {
   var self = this
-    , nodes = nodes
+    , nodes = grabNodes(LinkNode)
     , activeNode = 0;
 
   nodes[activeNode].highlight()
@@ -17,9 +17,15 @@ function NodeList(window, nodes) {
     nodes[activeNode].highlight()
   }
 
-  self.print = function(){
-    return node
+  self.activateCurrentNode = function() {
+    nodes[activeNode].activate()
   }
+}
+
+function grabNodes (LinkNode) {
+  return [].slice.call(window.document.getElementsByClassName("r")).map(function(node){
+    return new LinkNode(node);
+  })
 }
 
 module.exports = NodeList;
