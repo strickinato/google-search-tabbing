@@ -6,19 +6,45 @@ function NodeList(window, LinkNode) {
   nodes[activeNode].highlight()
 
   self.nextNode = function() {
-    nodes[activeNode].unhighlight()
-    activeNode += 1;
-    nodes[activeNode].highlight()
+    self.changeNode()(1)
   }
 
   self.prevNode = function() {
-    nodes[activeNode].unhighlight()
-    activeNode -= 1;
-    nodes[activeNode].highlight()
+    self.changeNode()(-1)
   }
 
-  self.activateCurrentNode = function() {
-    nodes[activeNode].activate()
+  self.activateCurrentNode = function(e) {
+    nodes[activeNode].activate(e)
+  }
+
+  self.changeNode = function() {
+    return function(dir) {
+      nodes[activeNode].unhighlight()
+      activeNode += dir
+      switch(true) {
+        case(activeNode < 0):
+          activeNode = 0;
+          break;
+        case(activeNode >= nodes.length):
+          activeNode = nodes.length - 1;
+          break;
+        default:
+          break;
+      }
+      
+      switch(nodes[activeNode].nearBorder()){
+        case("high"):
+          window.scrollBy(0, -100)
+          break
+        case("low"):
+          window.scrollBy(0, 100)
+          break;
+        default:
+          break;
+      }
+
+      nodes[activeNode].highlight()
+    }
   }
 }
 
