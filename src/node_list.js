@@ -49,13 +49,13 @@ function NodeList(detector, window, LinkNode) {
 }
 
 function grabNodes (detector, LinkNode) {
+  site = detector.getSite()
 
-  className = detector.getClass()
-  return [].slice.call(window.document.getElementsByClassName(className)).filter(function(node){
-    return (node.getAttribute('align') == undefined)
-  }).map(function(node){
-    return new LinkNode(node);
-  })
+  return [].slice.call(window.document.getElementsByClassName(site.elementAttr))
+           .filter(site.filter)
+           .map(function(node){
+              return new LinkNode(node);
+            })
 }
 
 module.exports = NodeList;

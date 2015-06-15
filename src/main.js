@@ -11,6 +11,6 @@
 
   keyMapper.addHandler(74, nodeList.nextNode);
   keyMapper.addHandler(75, nodeList.prevNode);
-  keyMapper.addHandler(13, nodeList.activateCurrentNode.bind(nodeList));
+  keyMapper.addHandler(13, nodeList.activateCurrentNode);
 
 }).call(null, chrome, window);

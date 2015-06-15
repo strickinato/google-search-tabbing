@@ -1,18 +1,35 @@
 function Detector(window) {
   var self = this;
-  
-  self.getClass = function() {
+
+  var hackerNews = {
+    elementAttr: "title",
+
+    filter: function(n){
+          return (n.getAttribute('align') == undefined)
+        }
+  }
+
+  var google = {
+    elementAttr: "r",
+    
+    filter: function(n){
+          return true
+        }
+  }
+
+  self.getSite = function() {
     str = window.location
     switch (true) {
       case /google\.com\/search/.test(str):
-        return "r"
+        return google
         break;
       case /news\.ycombinator\.com/.test(str):
-        return "title"
+        return hackerNews
         break;
     }
   }
-
 }
+
+
 
 module.exports = Detector;

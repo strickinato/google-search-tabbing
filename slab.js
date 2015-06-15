@@ -14,20 +14,37 @@ module.exports = createClicker;
 },{}],2:[function(require,module,exports){
 function Detector(window) {
   var self = this;
-  
-  self.getClass = function() {
+
+  var hackerNews = {
+    elementAttr: "title",
+
+    filter: function(n){
+          return (n.getAttribute('align') == undefined)
+        }
+  }
+
+  var google = {
+    elementAttr: "r",
+    
+    filter: function(n){
+          return true
+        }
+  }
+
+  self.getSite = function() {
     str = window.location
     switch (true) {
       case /google\.com\/search/.test(str):
-        return "r"
+        return google
         break;
       case /news\.ycombinator\.com/.test(str):
-        return "title"
+        return hackerNews
         break;
     }
   }
-
 }
+
+
 
 module.exports = Detector;
 
@@ -68,8 +85,6 @@ function LinkNode(node) {
 
   self.activate = function(e) {
     clicker(node.getElementsByTagName("a")[0], e)
-    // var dest = node.childNodes[0].href
-    // window.open(dest)
   }
 
   self.nearBorder = function() {
@@ -106,7 +121,7 @@ module.exports = LinkNode;
 
   keyMapper.addHandler(74, nodeList.nextNode);
   keyMapper.addHandler(75, nodeList.prevNode);
-  keyMapper.addHandler(13, nodeList.activateCurrentNode.bind(nodeList));
+  keyMapper.addHandler(13, nodeList.activateCurrentNode);
 
 }).call(null, chrome, window);
 },{"./detector":2,"./keymapper":3,"./link_node":4,"./node_list":6}],6:[function(require,module,exports){
@@ -161,13 +176,13 @@ function NodeList(detector, window, LinkNode) {
 }
 
 function grabNodes (detector, LinkNode) {
+  site = detector.getSite()
 
-  className = detector.getClass()
-  return [].slice.call(window.document.getElementsByClassName(className)).filter(function(node){
-    return (node.getAttribute('align') == undefined)
-  }).map(function(node){
-    return new LinkNode(node);
-  })
+  return [].slice.call(window.document.getElementsByClassName(site.elementAttr))
+           .filter(site.filter)
+           .map(function(node){
+              return new LinkNode(node);
+            })
 }
 
 module.exports = NodeList;

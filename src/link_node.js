@@ -15,8 +15,6 @@ function LinkNode(node) {
 
   self.activate = function(e) {
     clicker(node.getElementsByTagName("a")[0], e)
-    // var dest = node.childNodes[0].href
-    // window.open(dest)
   }
 
   self.nearBorder = function() {
