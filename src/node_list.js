@@ -1,6 +1,6 @@
-function NodeList(window, LinkNode) {
+function NodeList(detector, window, LinkNode) {
   var self = this
-    , nodes = grabNodes(LinkNode)
+    , nodes = grabNodes(detector, LinkNode)
     , activeNode = 0;
 
   nodes[activeNode].highlight()
@@ -48,8 +48,12 @@ function NodeList(window, LinkNode) {
   }
 }
 
-function grabNodes (LinkNode) {
-  return [].slice.call(window.document.getElementsByClassName("r")).map(function(node){
+function grabNodes (detector, LinkNode) {
+
+  className = detector.getClass()
+  return [].slice.call(window.document.getElementsByClassName(className)).filter(function(node){
+    return (node.getAttribute('align') == undefined)
+  }).map(function(node){
     return new LinkNode(node);
   })
 }

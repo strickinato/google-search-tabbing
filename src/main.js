@@ -3,8 +3,10 @@
   var LinkNode  = require('./link_node')
     , NodeList  = require('./node_list')
     , KeyMapper = require('./keymapper')
+    , Detector  = require('./detector')
 
-  var nodeList  = new NodeList(window, LinkNode)
+  var detector  = new Detector(window)
+    , nodeList  = new NodeList(detector, window, LinkNode)
     , keyMapper = new KeyMapper(window)
 
   keyMapper.addHandler(74, nodeList.nextNode);

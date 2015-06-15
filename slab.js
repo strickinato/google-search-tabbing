@@ -12,6 +12,26 @@ function createClicker(window) {
 module.exports = createClicker;
 
 },{}],2:[function(require,module,exports){
+function Detector(window) {
+  var self = this;
+  
+  self.getClass = function() {
+    str = window.location
+    switch (true) {
+      case /google\.com\/search/.test(str):
+        return "r"
+        break;
+      case /news\.ycombinator\.com/.test(str):
+        return "title"
+        break;
+    }
+  }
+
+}
+
+module.exports = Detector;
+
+},{}],3:[function(require,module,exports){
 function KeyMapper(window) {
   var self = this;
 
@@ -30,7 +50,7 @@ function KeyMapper(window) {
 
 module.exports = KeyMapper;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var createClicker = require('./clicker');
 
 function LinkNode(node) {
@@ -47,7 +67,7 @@ function LinkNode(node) {
   }
 
   self.activate = function(e) {
-    clicker(node.childNodes[0], e)
+    clicker(node.getElementsByTagName("a")[0], e)
     // var dest = node.childNodes[0].href
     // window.open(dest)
   }
@@ -72,14 +92,16 @@ function LinkNode(node) {
 
 module.exports = LinkNode;
 
-},{"./clicker":1}],4:[function(require,module,exports){
+},{"./clicker":1}],5:[function(require,module,exports){
 (function(chrome, window) {
   
   var LinkNode  = require('./link_node')
     , NodeList  = require('./node_list')
     , KeyMapper = require('./keymapper')
+    , Detector  = require('./detector')
 
-  var nodeList  = new NodeList(window, LinkNode)
+  var detector  = new Detector(window)
+    , nodeList  = new NodeList(detector, window, LinkNode)
     , keyMapper = new KeyMapper(window)
 
   keyMapper.addHandler(74, nodeList.nextNode);
@@ -87,10 +109,10 @@ module.exports = LinkNode;
   keyMapper.addHandler(13, nodeList.activateCurrentNode.bind(nodeList));
 
 }).call(null, chrome, window);
-},{"./keymapper":2,"./link_node":3,"./node_list":5}],5:[function(require,module,exports){
-function NodeList(window, LinkNode) {
+},{"./detector":2,"./keymapper":3,"./link_node":4,"./node_list":6}],6:[function(require,module,exports){
+function NodeList(detector, window, LinkNode) {
   var self = this
-    , nodes = grabNodes(LinkNode)
+    , nodes = grabNodes(detector, LinkNode)
     , activeNode = 0;
 
   nodes[activeNode].highlight()
@@ -138,12 +160,16 @@ function NodeList(window, LinkNode) {
   }
 }
 
-function grabNodes (LinkNode) {
-  return [].slice.call(window.document.getElementsByClassName("r")).map(function(node){
+function grabNodes (detector, LinkNode) {
+
+  className = detector.getClass()
+  return [].slice.call(window.document.getElementsByClassName(className)).filter(function(node){
+    return (node.getAttribute('align') == undefined)
+  }).map(function(node){
     return new LinkNode(node);
   })
 }
 
 module.exports = NodeList;
 
-},{}]},{},[4]);
+},{}]},{},[5]);

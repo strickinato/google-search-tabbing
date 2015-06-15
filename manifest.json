@@ -14,7 +14,8 @@
     {
       "matches": [
           "http://*.google.com/*",
-          "https://*.google.com/*"
+          "https://*.google.com/*",
+          "https://news.ycombinator.com/"
           ],
       "css": ["style.css"],
       "js": ["slab.js"],
